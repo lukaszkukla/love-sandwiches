@@ -134,6 +134,16 @@ def calculate_stock_data(data):
     return new_stock_data
 
 
+# additional code for final challenge
+def get_stock_values(data):
+    headings = SHEET.worksheet('stock').get_all_values()[0]
+
+    data_dict = {} 
+    for header, data in zip(headings, data):
+        data_dict[header] = data
+    
+    return data_dict
+
 
 def main():
     """
@@ -142,11 +152,14 @@ def main():
     data = get_sales_data()
     sales_data = [int(num) for num in data]
     update_worksheet(sales_data, 'sales')
+
     new_surplus_data = calculate_surplus_data(sales_data)
     update_worksheet(new_surplus_data, 'surplus')
+
     sales_columns = get_last_5_entries_sales()
     stock_data = calculate_stock_data(sales_columns)
     update_worksheet(stock_data, 'stock')
+    return stock_data
     
 
 
@@ -159,5 +172,9 @@ print(
      )
 
 
-main()
+stock_data = main()
 
+# additional code for final challenge
+stock_values = get_stock_values(stock_data)
+
+print(f'Make the following numbers of sandwiches for next market:\n {stock_values}')
